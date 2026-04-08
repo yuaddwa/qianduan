@@ -2,12 +2,40 @@
 .auth-bg {
   min-height: 100svh;
   background:
-    radial-gradient(900px 500px at 15% 15%, rgba(170, 59, 255, 0.12), transparent 55%),
-    radial-gradient(700px 420px at 85% 25%, rgba(99, 102, 241, 0.12), transparent 55%),
+    radial-gradient(1000px 600px at 10% 20%, rgba(170, 59, 255, 0.15), transparent 60%),
+    radial-gradient(800px 500px at 90% 30%, rgba(99, 102, 241, 0.15), transparent 60%),
+    radial-gradient(600px 400px at 50% 80%, rgba(251, 114, 153, 0.1), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(249, 250, 251, 1));
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(79, 70, 229, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(251, 114, 153, 0.05) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
 }
 
 .auth-shell {
+  position: relative;
+  z-index: 1;
   min-height: 100svh;
   display: flex;
   align-items: center;
