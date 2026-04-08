@@ -1,0 +1,57 @@
+# 复制到服务器后：nginx -t && systemctl reload nginx
+#
+# 前端静态目录（与 deploy.ps1 默认一致）：
+#   /opt/ysc/frontend/dist
+#
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 情况 A：网站挂在根路径（推荐，最简单）
+#   访问：http://101.37.157.23/#/home
+#   构建：npm run build
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+server {
+    listen 80;
+    server_name 101.37.157.23;
+
+    root /opt/ysc/frontend/dist;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /assets/ {
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 情况 B：网站挂在子路径 /web/（你截图里用的地址）
+#   访问：http://101.37.157.23/web/#/home
+#   构建：npm run build:web   （等价于 vite build --base /web/）
+#
+# 说明：浏览器只会向服务器请求 /web/ 或 /web/index.html，#/home 不会发给 Nginx。
+# 若只配了 location / 且 root 指向 dist，请求 /web/ 会去找 dist/web/ 目录 → 404。
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# server {
+#     listen 80;
+#     server_name 101.37.157.23;
+#
+#     # 无尾部斜杠时跳到 /web/
+#     location = /web {
+#         return 301 /web/;
+#     }
+#
+#     # 把 /web/ 映射到 dist 根目录（与 build:web 产出的资源路径一致）
+#     location /web/ {
+#         alias /opt/ysc/frontend/dist/;
+#         index index.html;
+#     }
+#
+#     # 可选：其它路径仍走根站点
+#     # location / {
+#     #     root /var/www/html;
+#     # }
+# }
