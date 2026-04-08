@@ -11,7 +11,7 @@ export default function Login({ onLoginSuccess }: Props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [code, setCode] = useState('')
-  const [remember, setRemember] = useState(true)
+  const [remember, setRemember] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
@@ -20,11 +20,12 @@ export default function Login({ onLoginSuccess }: Props) {
 
   return (
     <div className="auth-bg">
+      <div className="cyber-earth"></div>
       <div className="auth-shell auth-shell--right">
         <div className="auth-card auth-card--big auth-card--login">
           <h1 className="auth-title">用户登录</h1>
 
-          <div className="auth-tabs" role="tablist" aria-label="登录方式">
+          <div className={`auth-tabs ${mode === 'password' ? 'password-tab' : 'email-tab'}`} role="tablist" aria-label="登录方式">
             <button
               className={`auth-tab ${mode === 'password' ? 'is-active' : ''}`}
               type="button"
@@ -195,6 +196,8 @@ export default function Login({ onLoginSuccess }: Props) {
                 />
                 <span>7天免登录</span>
               </label>
+            </div>
+            <div style={{ margin: '10px 0' }}>
               <a className="auth-link" href="#/forgot">
                 忘记密码？
               </a>
